@@ -18,21 +18,21 @@
     String doctorHome = contextPath + "/doctors/doctorHome.jsp";
     String staffHome = contextPath + "/staffs/staffHome.jsp";
 
-    // Redirect based on role and avoid redirection loop
-    if ("patient".equals(role) && !requestURI.endsWith("patientHome.jsp")) {
-        response.sendRedirect(patientHome);
-        return;
-    }
-
-    if ("doctor".equals(role) && !requestURI.endsWith("doctorHome.jsp")) {
-        response.sendRedirect(doctorHome);
-        return;
-    }
-
-    if ("staff".equals(role) && !requestURI.endsWith("staffHome.jsp")) {
-        response.sendRedirect(staffHome);
-        return;
-    }
+//    // Redirect based on role and avoid redirection loop
+//    if ("patient".equals(role) && !requestURI.endsWith("patientHome.jsp")) {
+//        response.sendRedirect(patientHome);
+//        return;
+//    }
+//
+//    if ("doctor".equals(role) && !requestURI.endsWith("doctorHome.jsp")) {
+//        response.sendRedirect(doctorHome);
+//        return;
+//    }
+//
+//    if ("staff".equals(role) && !requestURI.endsWith("staffHome.jsp")) {
+//        response.sendRedirect(staffHome);
+//        return;
+//    }
 %>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -64,16 +64,16 @@
                 <a class="nav-link <%= (request.getRequestURI().endsWith("/staffHome.jsp") ? "active" : "") %>" href="<%= staffHome %>">Book Appointment</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link <%= (request.getRequestURI().endsWith("/staffManageBilling.jsp") ? "active" : "") %>" href="<%= contextPath %>/staffs/staffManageBilling.jsp">Create/Manage Billing</a>
+                <a class="nav-link <%= (request.getRequestURI().endsWith("/staffManageBilling.jsp") ? "active" : "") %>" href="<%= contextPath %>/staffs/staffManageBilling.jsp">Create Billing</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link <%= (request.getRequestURI().endsWith("/staffViewEditPatient.jsp") ? "active" : "") %>" href="<%= contextPath %>/staffs/staffViewEditPatient.jsp">View/Edit Patient Details</a>
+                <a class="nav-link <%= (request.getRequestURI().endsWith("/staffViewEditPatient.jsp") ? "active" : "") %>" href="<%= contextPath %>/staffs/staffViewEditPatient.jsp">Edit Patient</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link <%= (request.getRequestURI().endsWith("/staffRegisterPatient.jsp") ? "active" : "") %>" href="<%= contextPath %>/staffs/staffRegisterPatient.jsp">Register New Patients</a>
+                <a class="nav-link <%= (request.getRequestURI().endsWith("/staffRegisterPatient.jsp") ? "active" : "") %>" href="<%= contextPath %>/staffs/staffRegisterPatient.jsp">New Patients</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link <%= (request.getRequestURI().endsWith("/staffRegisterDoctor.jsp") ? "active" : "") %>" href="<%= contextPath %>/staffs/staffRegisterDoctor.jsp">Register New Doctors</a>
+                <a class="nav-link <%= (request.getRequestURI().endsWith("/staffRegisterDoctor.jsp") ? "active" : "") %>" href="<%= contextPath %>/staffs/staffRegisterDoctor.jsp">New Doctors</a>
             </li>
             <% } %>
             <li class="nav-item">
