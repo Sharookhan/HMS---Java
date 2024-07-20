@@ -1,0 +1,16 @@
+body {
+    font-family: 'Georgia', serif;
+    color: #333;
+}
+
+.navbar {
+    background-color: #000 !important;
+}
+
+.navbar-brand {
+    color: #fff !important;
+}
+
+.navbar-brand:hover {
+    color: #ccc !important;
+}
