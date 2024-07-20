@@ -9,7 +9,8 @@ import java.util.List;
 
 public class AppointmentDAO {
 
-    public void addAppointment(Appointment appointment) throws SQLException {
+    // Modified addAppointment to return a boolean indicating success
+    public boolean addAppointment(Appointment appointment) throws SQLException {
         String query = "INSERT INTO Appointments (patient_id, doctor_id, appointment_date, appointment_time, feedback) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = DataSourceUtils.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -18,7 +19,8 @@ public class AppointmentDAO {
             statement.setDate(3, appointment.getAppointmentDate());
             statement.setTime(4, appointment.getAppointmentTime());
             statement.setString(5, appointment.getFeedback());
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected > 0; // Return true if at least one row was affected
         }
     }
 
