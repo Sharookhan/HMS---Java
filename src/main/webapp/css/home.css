@@ -1,0 +1,81 @@
+
+.login-container {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+}
+
+.login-image {
+    background: url('../images/home/home_cover.jpg') no-repeat center center;
+    background-size: cover;
+    height: 100vh;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.login-form {
+    height: 100vh;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.form-wrapper {
+    padding: 2rem;
+    background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white */
+    backdrop-filter: blur(5px); /* Blur effect */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+    width: 100%;
+    max-width: 400px; /* Max width of the form */
+    position: relative;
+    z-index: 1;
+}
+
+.form-control {
+    border: 1px solid #ccc;
+    border-radius: 0;
+}
+
+.btn-primary {
+    background-color: #000;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #333;
+}
+
+@media (max-width: 767px) {
+    .login-image {
+        display: block; /* Show image on small screens */
+        width: 100%; /* Full width on small screens */
+        height: auto; /* Adjust height */
+    }
+
+    .login-form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: url('../images/home/home_cover.jpg') no-repeat center center;
+        background-size: cover;
+        height: auto; /* Adjust height for smaller screens */
+        width: 100%;
+    }
+
+    .form-wrapper {
+        background-color: rgba(255, 255, 255, 0.8); /* White background with opacity */
+        backdrop-filter: blur(5px); /* Blur effect */
+        width: 100%;
+        max-width: 100%;
+        height: auto; /* Adjust height for smaller screens */
+        position: static; /* Remove absolute positioning on small screens */
+        box-shadow: none; /* Remove shadow on small screens */
+        border-radius: 0; /* Ensure no rounded corners */
+    }
+}
