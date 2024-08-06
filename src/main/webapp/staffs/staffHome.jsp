@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HMS - Staff Home</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/master.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/master.css" rel="stylesheet">
 </head>
 <body>
 <%@ include file="../common/navbar.jsp" %>
@@ -26,7 +26,7 @@
 
     <!-- Appointment Booking Form -->
     <h2>Book an Appointment</h2>
-    <form action="${pageContext.request.contextPath}/bookAppointment" method="post">
+    <form action="<%= request.getContextPath() %>/bookAppointment" method="post">
         <div class="form-group">
             <label for="patientId">Patient</label>
             <select class="form-control" id="patientId" name="patientId" required>

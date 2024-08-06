@@ -24,6 +24,24 @@ public class DoctorDAO {
         }
     }
 
+    public String getNextDoctorId() throws SQLException {
+        String query = "SELECT MAX(doctor_id) AS last_id FROM Doctors";
+        try (Connection connection = DataSourceUtils.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+            if (resultSet.next()) {
+                String lastId = resultSet.getString("last_id");
+                if (lastId == null) {
+                    return "D1"; // Start from D1 if no records exist
+                } else {
+                    int nextId = Integer.parseInt(lastId.substring(1)) + 1; // Increment the numeric part
+                    return String.format("D%d", nextId); // Format to maintain D<number> format
+                }
+            }
+        }
+        return "D1"; // Default in case of error
+    }
+
     public Doctor getDoctor(String doctorId) throws SQLException {
         String query = "SELECT * FROM Doctors WHERE doctor_id = ?";
         try (Connection connection = DataSourceUtils.getConnection();
