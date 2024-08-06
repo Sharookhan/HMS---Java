@@ -42,6 +42,24 @@ public class MedicalHistoryDAO {
         return null;
     }
 
+    public MedicalHistory getPatientMedicalHistory(String patientId) throws SQLException {
+        String query = "SELECT * FROM MedicalHistory WHERE patient_id = ?";
+        try (Connection connection = DataSourceUtils.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, patientId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    MedicalHistory medicalHistory = new MedicalHistory();
+                    medicalHistory.setDiagnosis(resultSet.getString("diagnosis"));
+                    medicalHistory.setTreatment(resultSet.getString("treatment"));
+                    medicalHistory.setNotes(resultSet.getString("notes"));
+                    return medicalHistory;
+                }
+            }
+        }
+        return null;
+    }
+
     public List<MedicalHistory> getAllMedicalHistories() throws SQLException {
         String query = "SELECT * FROM MedicalHistory";
         List<MedicalHistory> medicalHistoryList = new ArrayList<>();
