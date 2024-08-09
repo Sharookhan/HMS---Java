@@ -102,20 +102,52 @@ public class PatientDAO {
     }
 
     public void updatePatient(Patient patient) throws SQLException {
-        String query = "UPDATE Patients SET first_name = ?, last_name = ?, date_of_birth = ?, gender = ?, phone_number = ?, email = ?, address = ?, password = ? WHERE patient_id = ?";
+        if (patient.getPatientId() == null || patient.getPatientId().trim().isEmpty()) {
+            throw new IllegalArgumentException("Patient ID cannot be null or empty.");
+        }
+
+        StringBuilder queryBuilder = new StringBuilder("UPDATE Patients SET ");
+        List<Object> parameters = new ArrayList<>();
+
+        // Append the fields to be updated
+        queryBuilder.append("first_name = ?, ");
+        parameters.add(patient.getFirstName());
+        queryBuilder.append("last_name = ?, ");
+        parameters.add(patient.getLastName());
+        queryBuilder.append("date_of_birth = ?, ");
+        parameters.add(patient.getDateOfBirth());
+        queryBuilder.append("gender = ?, ");
+        parameters.add(patient.getGender());
+        queryBuilder.append("phone_number = ?, ");
+        parameters.add(patient.getPhoneNumber());
+        queryBuilder.append("email = ?, ");
+        parameters.add(patient.getEmail());
+        queryBuilder.append("address = ?");
+        parameters.add(patient.getAddress());
+
+        // Conditionally append password if it's not null or empty
+        if (patient.getPassword() != null && !patient.getPassword().trim().isEmpty()) {
+            queryBuilder.append(", password = ?");
+            parameters.add(patient.getPassword());
+        }
+
+        // Append the WHERE clause
+        queryBuilder.append(" WHERE patient_id = ?");
+        parameters.add(patient.getPatientId());
+
+        String query = queryBuilder.toString();
+        System.out.println("Generated Query: " + query); // Debug info
+        System.out.println("Parameters: " + parameters); // Debug info
+
         try (Connection connection = DataSourceUtils.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
-            statement.setString(1, patient.getFirstName());
-            statement.setString(2, patient.getLastName());
-            statement.setDate(3, patient.getDateOfBirth());
-            statement.setString(4, patient.getGender());
-            statement.setString(5, patient.getPhoneNumber());
-            statement.setString(6, patient.getEmail());
-            statement.setString(7, patient.getAddress());
-            statement.setString(8, patient.getPassword());
-            statement.setString(9, patient.getPatientId());
+            // Set parameters
+            for (int i = 0; i < parameters.size(); i++) {
+                statement.setObject(i + 1, parameters.get(i));
+            }
 
+            // Execute update
             int rowsAffected = statement.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Patient updated successfully.");
@@ -123,14 +155,14 @@ public class PatientDAO {
                 System.out.println("No rows affected. Patient may not have been updated.");
             }
 
-            // Optional: Commit transaction if using manual commit
-            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
-            // Optional: Rollback transaction if using manual commit
             throw new SQLException("Error updating patient: " + e.getMessage(), e);
         }
     }
+
+
+
 
     public void deletePatient(String patientId) throws SQLException {
         String query = "DELETE FROM Patients WHERE patient_id = ?";
@@ -146,8 +178,6 @@ public class PatientDAO {
                 System.out.println("No rows affected. Patient may not have been deleted.");
             }
 
-            // Optional: Commit transaction if using manual commit
-            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
             // Optional: Rollback transaction if using manual commit

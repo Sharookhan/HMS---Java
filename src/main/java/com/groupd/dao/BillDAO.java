@@ -85,4 +85,48 @@ public class BillDAO {
             statement.executeUpdate();
         }
     }
+
+    public List<Bill> getBillsByPatientId(String patientId) throws SQLException {
+        String query = "SELECT * FROM Bills WHERE patient_id = ?";
+        List<Bill> bills = new ArrayList<>();
+        try (Connection connection = DataSourceUtils.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, patientId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Bill bill = new Bill();
+                    bill.setBillId(resultSet.getInt("bill_id"));
+                    bill.setPatientId(resultSet.getString("patient_id"));
+                    bill.setStaffId(resultSet.getString("staff_id"));
+                    bill.setAmount(resultSet.getBigDecimal("amount"));
+                    bill.setBillDate(resultSet.getDate("bill_date"));
+                    bill.setStatus(resultSet.getString("status"));
+                    bills.add(bill);
+                }
+            }
+        }
+        return bills;
+    }
+
+    public List<Bill> getPendingBillsByPatientId(String patientId) throws SQLException {
+        String query = "SELECT * FROM Bills WHERE patient_id = ? AND status = 'Unpaid'";
+        List<Bill> bills = new ArrayList<>();
+        try (Connection connection = DataSourceUtils.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, patientId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Bill bill = new Bill();
+                    bill.setBillId(resultSet.getInt("bill_id"));
+                    bill.setPatientId(resultSet.getString("patient_id"));
+                    bill.setStaffId(resultSet.getString("staff_id"));
+                    bill.setAmount(resultSet.getBigDecimal("amount"));
+                    bill.setBillDate(resultSet.getDate("bill_date"));
+                    bill.setStatus(resultSet.getString("status"));
+                    bills.add(bill);
+                }
+            }
+        }
+        return bills;
+    }
 }
