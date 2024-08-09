@@ -1,5 +1,10 @@
+<%@ page import="com.groupd.beans.Appointment" %>
+<%@ page import="com.groupd.dao.AppointmentDAO" %>
+<%@ page import="com.groupd.dao.PatientDAO" %>
+<%@ page import="com.groupd.beans.Patient" %>
+<%@ page import="com.groupd.beans.User" %>
+<%@ page import="java.util.List" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +18,58 @@
 <body>
 <%@ include file="../common/navbar.jsp" %>
 <div class="container mt-4">
-    <h1>Welcome, Doctor</h1>
+    <h2>Appointments</h2>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Patient Name</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <%
+            // Check if the 'user' object is already defined in the session
+            User sessionUser = (User) session.getAttribute("user");
+            if (sessionUser != null && "doctor".equals(sessionUser.getRole())) {
+                String doctorId = sessionUser.getId(); // Get doctor ID from User object
+                AppointmentDAO ap = new AppointmentDAO();
+                PatientDAO pao = new PatientDAO();
+                List<Appointment> appointments = ap.getAppointmentsByDoctor(doctorId);
+
+                if (appointments != null && !appointments.isEmpty()) {
+                    for (Appointment appointment : appointments) {
+                        Patient patient = pao.getPatient(appointment.getPatientId());
+        %>
+        <tr>
+            <td><%= patient.getFirstName() %> <%= patient.getLastName() %></td>
+            <td><%= appointment.getAppointmentDate() %></td>
+            <td><%= appointment.getAppointmentTime() %></td>
+            <td>
+                <a href="<%= request.getContextPath() %>/viewAppointment?appointmentId=<%= appointment.getAppointmentId() %>">View</a> |
+                <a href="<%= request.getContextPath() %>/editAppointment?appointmentId=<%= appointment.getAppointmentId() %>">Edit</a>
+            </td>
+        </tr>
+        <%
+            }
+        } else {
+        %>
+        <tr>
+            <td colspan="4">No appointments found.</td>
+        </tr>
+        <%
+            }
+        } else {
+        %>
+        <tr>
+            <td colspan="4">Doctor ID is not available or you are not logged in as a doctor.</td>
+        </tr>
+        <%
+            }
+        %>
+        </tbody>
+    </table>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
