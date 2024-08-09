@@ -84,6 +84,44 @@ public class AppointmentDAO {
         return appointments;
     }
 
+    public String getDoctorNameById(String doctorId) throws SQLException {
+        String query = "SELECT first_name, last_name FROM Doctors WHERE doctor_id = ?";
+        try (Connection connection = DataSourceUtils.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, doctorId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    String firstName = resultSet.getString("first_name");
+                    String lastName = resultSet.getString("last_name");
+                    return firstName + " " + lastName; // Combine first and last name
+                }
+            }
+        }
+        return null; // Return null if the doctor is not found
+    }
+
+
+    public List<Appointment> getAllAppointmentsByPatientId(String patientId) throws SQLException {
+        String query = "SELECT * FROM Appointments WHERE patient_id = ?";
+        List<Appointment> appointments = new ArrayList<>();
+        try (Connection connection = DataSourceUtils.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, patientId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Appointment appointment = new Appointment();
+                    appointment.setAppointmentId(resultSet.getInt("appointment_id"));
+                    appointment.setPatientId(resultSet.getString("patient_id"));
+                    appointment.setDoctorId(resultSet.getString("doctor_id"));
+                    appointment.setAppointmentDate(resultSet.getDate("appointment_date"));
+                    appointment.setAppointmentTime(resultSet.getTime("appointment_time"));
+                    appointment.setFeedback(resultSet.getString("feedback"));
+                    appointments.add(appointment);
+                }
+            }
+        }
+        return appointments;
+    }
     public void updateAppointment(Appointment appointment) throws SQLException {
         String query = "UPDATE Appointments SET patient_id = ?, doctor_id = ?, appointment_date = ?, appointment_time = ?, feedback = ? WHERE appointment_id = ?";
         try (Connection connection = DataSourceUtils.getConnection();

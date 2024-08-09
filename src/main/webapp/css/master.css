@@ -34,6 +34,12 @@ body {
     border-color: #777;
 }
 
+.th-black
+{
+    background-color: black !important;
+    color:white !important;
+}
+
 .form-container .btn-primary {
     background-color: #000;
     border-color: #000;

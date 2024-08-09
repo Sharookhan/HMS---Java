@@ -65,6 +65,22 @@ public class DoctorDAO {
         return null;
     }
 
+    public String getDoctorNameById(String doctorId) throws SQLException {
+        String query = "SELECT first_name, last_name FROM Doctors WHERE doctor_id = ?";
+        try (Connection connection = DataSourceUtils.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, doctorId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    String firstName = resultSet.getString("first_name");
+                    String lastName = resultSet.getString("last_name");
+                    return firstName + " " + lastName;
+                }
+            }
+        }
+        return "Unknown"; // Return "Unknown" if the doctor is not found
+    }
+
     public List<Doctor> getAllDoctors() throws SQLException {
         String query = "SELECT * FROM Doctors";
         List<Doctor> doctors = new ArrayList<>();
