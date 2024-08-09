@@ -106,4 +106,31 @@ public class AppointmentDAO {
             statement.executeUpdate();
         }
     }
+  
+  public List<Appointment> getAppointmentsByDoctor(String doctorId) throws SQLException {
+        String query = "SELECT * FROM Appointments WHERE doctor_id = ?";
+        List<Appointment> appointments = new ArrayList<>();
+        try (Connection connection = DataSourceUtils.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, doctorId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Appointment appointment = new Appointment();
+                    appointment.setAppointmentId(resultSet.getInt("appointment_id"));
+                    appointment.setPatientId(resultSet.getString("patient_id"));
+                    appointment.setDoctorId(resultSet.getString("doctor_id"));
+                    appointment.setAppointmentDate(resultSet.getDate("appointment_date"));
+                    appointment.setAppointmentTime(resultSet.getTime("appointment_time"));
+                    appointment.setFeedback(resultSet.getString("feedback"));
+                    appointments.add(appointment);
+                }
+            }
+        }
+        return appointments;
+    }
+
+  
+  
 }
+
+ 

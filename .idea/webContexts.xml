@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebContextManager">
+    <option name="state">
+      <map>
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/doctors/doctorHome.jsp" value="file://$PROJECT_DIR$/src/main/webapp/doctors" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/doctors/doctorProfile.jsp" value="file://$PROJECT_DIR$/src/main/webapp/doctors" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/doctors/editAppointment.jsp" value="file://$PROJECT_DIR$/src/main/webapp/doctors" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/doctors/editDoctorProfile.jsp" value="file://$PROJECT_DIR$/src/main/webapp/doctors" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/doctors/listDoctors.jsp" value="file://$PROJECT_DIR$/src/main/webapp/doctors" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/doctors/manageAppointment.jsp" value="file://$PROJECT_DIR$/src/main/webapp/doctors" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/doctors/viewAppointment.jsp" value="file://$PROJECT_DIR$/src/main/webapp/doctors" />
+      </map>
+    </option>
+  </component>
+</project>
