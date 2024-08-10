@@ -19,26 +19,30 @@ public class UpdateAppointmentServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String appointmentIdStr = request.getParameter("appointmentId");
+        String patientId = request.getParameter("patientId");
+        String doctorId = request.getParameter("doctorId");
         String appointmentDate = request.getParameter("appointmentDate");
         String appointmentTime = request.getParameter("appointmentTime");
         String feedback = request.getParameter("feedback");
-        String patientId = request.getParameter("patientId");
-        String doctorId = request.getParameter("doctorId");
 
-        if (appointmentIdStr == null || appointmentDate == null || appointmentTime == null || patientId == null || doctorId == null) {
+        // Validate input
+        if (appointmentIdStr == null || patientId == null || doctorId == null ||
+                appointmentDate == null || appointmentTime == null) {
             request.setAttribute("message", "All fields are required.");
             request.setAttribute("alertClass", "alert-danger");
-            request.getRequestDispatcher("/editAppointment.jsp?appointmentId=" + appointmentIdStr).forward(request, response);
+            request.getRequestDispatcher("/doctors/editAppointment.jsp?appointmentId=" + appointmentIdStr).forward(request, response);
             return;
         }
 
         int appointmentId = Integer.parseInt(appointmentIdStr);
+
         Appointment appointment = new Appointment();
         appointment.setAppointmentId(appointmentId);
-        appointment.setPatientId(patientId);
-        appointment.setDoctorId(doctorId);
+        appointment.setPatientId(patientId);  // Set patientId as String
+        appointment.setDoctorId(doctorId);    // Set doctorId as String
         appointment.setAppointmentDate(java.sql.Date.valueOf(appointmentDate));
 
+        // Handle time formatting
         try {
             if (!appointmentTime.matches("\\d{2}:\\d{2}(:\\d{2})?")) {
                 throw new IllegalArgumentException("Invalid time format.");
@@ -50,7 +54,7 @@ public class UpdateAppointmentServlet extends HttpServlet {
         } catch (IllegalArgumentException e) {
             request.setAttribute("message", "Invalid time format. Use HH:MM or HH:MM:SS.");
             request.setAttribute("alertClass", "alert-danger");
-            request.getRequestDispatcher("/editAppointment.jsp?appointmentId=" + appointmentIdStr).forward(request, response);
+            request.getRequestDispatcher("/doctors/editAppointment.jsp?appointmentId=" + appointmentIdStr).forward(request, response);
             return;
         }
 
@@ -67,6 +71,9 @@ public class UpdateAppointmentServlet extends HttpServlet {
             request.setAttribute("alertClass", "alert-danger");
         }
 
+        // Redirect to the view appointment page
         response.sendRedirect(request.getContextPath() + "/viewAppointment?appointmentId=" + appointmentId);
     }
+
+
 }

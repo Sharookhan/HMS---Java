@@ -18,6 +18,7 @@
 <div class="container mt-4">
     <h2>Edit Appointment</h2>
     <%
+        // Get the appointmentId from the request
         String appointmentIdStr = request.getParameter("appointmentId");
         int appointmentId = 0;
         Appointment appointment = null;
@@ -25,6 +26,7 @@
         if (appointmentIdStr != null && !appointmentIdStr.isEmpty()) {
             appointmentId = Integer.parseInt(appointmentIdStr);
 
+            // Fetch the appointment details from the database
             AppointmentDAO appointmentDAO = new AppointmentDAO();
             try {
                 appointment = appointmentDAO.getAppointment(appointmentId);
@@ -39,7 +41,7 @@
         <input type="hidden" name="appointmentId" value="<%= appointment.getAppointmentId() %>" />
         <div class="form-group">
             <label for="patientId">Patient ID</label>
-            <input type="text" class="form-control" id="patientId" name="patientId" value="<%= appointment.getPatientId() %>" required disabled>
+            <input type="text" class="form-control" id="patientId" name="patientId" value="<%= appointment.getPatientId() %>" required>
         </div>
         <div class="form-group">
             <label for="doctorId">Doctor ID</label>
@@ -47,11 +49,11 @@
         </div>
         <div class="form-group">
             <label for="appointmentDate">Date</label>
-            <input type="date" class="form-control" id="appointmentDate" name="appointmentDate" value="<%= appointment.getAppointmentDate().toLocalDate() %>" required>
+            <input type="date" class="form-control" id="appointmentDate" name="appointmentDate" value="<%= appointment.getAppointmentDate() %>" required>
         </div>
         <div class="form-group">
             <label for="appointmentTime">Time</label>
-            <input type="time" class="form-control" id="appointmentTime" name="appointmentTime" value="<%= appointment.getAppointmentTime().toLocalTime() %>" required>
+            <input type="time" class="form-control" id="appointmentTime" name="appointmentTime" value="<%= appointment.getAppointmentTime() %>" required>
         </div>
         <div class="form-group">
             <label for="feedback">Feedback</label>
