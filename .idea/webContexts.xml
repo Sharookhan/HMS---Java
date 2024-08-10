@@ -9,7 +9,7 @@
         <entry key="file://$PROJECT_DIR$/src/main/webapp/doctors/editDoctorProfile.jsp" value="file://$PROJECT_DIR$/src/main/webapp/doctors" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/doctors/listDoctors.jsp" value="file://$PROJECT_DIR$/src/main/webapp/doctors" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/doctors/manageAppointment.jsp" value="file://$PROJECT_DIR$/src/main/webapp/doctors" />
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/doctors/viewAppointment.jsp" value="file://$PROJECT_DIR$/src/main/webapp/doctors" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/doctors/viewAppointment.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
       </map>
     </option>
   </component>

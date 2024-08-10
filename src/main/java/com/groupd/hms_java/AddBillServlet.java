@@ -32,7 +32,7 @@ public class AddBillServlet extends HttpServlet {
 
         BillDAO billDAO = new BillDAO();
         try {
-            if (status.equals("Paid")) {
+            if ("Paid".equals(status)) {
                 // Fetch unpaid bills for the patient
                 List<Bill> unpaidBills = billDAO.getPendingBillsByPatientId(patientId);
 
@@ -42,49 +42,38 @@ public class AddBillServlet extends HttpServlet {
                         .reduce(BigDecimal.ZERO, BigDecimal::add);
 
                 // Determine remaining balance after payment
-                BigDecimal remainingPayment = amount.subtract(totalUnpaid);
+                BigDecimal remainingPayment = amount;
                 BigDecimal totalPaid = BigDecimal.ZERO;
 
                 for (Bill unpaidBill : unpaidBills) {
                     BigDecimal billAmount = unpaidBill.getAmount();
-                    if (remainingPayment.compareTo(BigDecimal.ZERO) >= 0) {
+                    if (remainingPayment.compareTo(billAmount) >= 0) {
+                        // Fully pay off this bill
                         unpaidBill.setStatus("Paid");
                         totalPaid = totalPaid.add(billAmount);
+                        remainingPayment = remainingPayment.subtract(billAmount);
                         billDAO.updateBill(unpaidBill);
                     } else {
-                        BigDecimal billBalance = billAmount.subtract(totalPaid);
-                        if (amount.compareTo(billBalance) >= 0) {
-                            unpaidBill.setStatus("Paid");
-                            totalPaid = totalPaid.add(billBalance);
-                            billDAO.updateBill(unpaidBill);
-                        } else {
-                            // Delete the original unpaid bill
-                            billDAO.deleteBill(unpaidBill.getBillId());
+                        // Partially pay this bill
+                        unpaidBill.setAmount(billAmount.subtract(remainingPayment));
+                        unpaidBill.setStatus("Unpaid");
+                        billDAO.updateBill(unpaidBill);
 
-                            // Insert a record for the amount paid
-                            Bill paidBill = new Bill();
-                            paidBill.setPatientId(patientId);
-                            paidBill.setStaffId(staffId);
-                            paidBill.setAmount(amount);
-                            paidBill.setBillDate(billDate);
-                            paidBill.setStatus("Paid");
-                            billDAO.addBill(paidBill);
+                        // Create a new bill for the remaining payment
+                        Bill paidBill = new Bill();
+                        paidBill.setPatientId(patientId);
+                        paidBill.setStaffId(staffId);
+                        paidBill.setAmount(remainingPayment);
+                        paidBill.setBillDate(billDate);
+                        paidBill.setStatus("Paid");
+                        billDAO.addBill(paidBill);
 
-                            // Insert a record for the remaining unpaid amount
-                            Bill remainingBill = new Bill();
-                            remainingBill.setPatientId(patientId);
-                            remainingBill.setStaffId(staffId);
-                            remainingBill.setAmount(billBalance.subtract(amount));
-                            remainingBill.setBillDate(billDate);
-                            remainingBill.setStatus("Unpaid");
-                            billDAO.addBill(remainingBill);
-
-                            break;
-                        }
+                        remainingPayment = BigDecimal.ZERO;
+                        break;
                     }
                 }
 
-                // Set attributes for the JSP
+                // Handle any remaining amount to be returned or additional unpaid balance
                 if (remainingPayment.compareTo(BigDecimal.ZERO) > 0) {
                     request.setAttribute("message", "Payment processed successfully! You have overpaid. Remaining balance to be returned: " + remainingPayment);
                     request.setAttribute("alertClass", "alert-info");
@@ -136,6 +125,7 @@ public class AddBillServlet extends HttpServlet {
         // Forward to the JSP page
         request.getRequestDispatcher("staffs/staffManageBilling.jsp").forward(request, response);
     }
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

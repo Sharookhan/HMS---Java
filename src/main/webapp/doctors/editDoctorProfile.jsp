@@ -6,8 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Profile</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/master.css" rel="stylesheet">
 </head>
 <body>
+<%@ include file="../common/navbar.jsp" %>
 <div class="container mt-4">
     <h2>Doctor Profile</h2>
     <%

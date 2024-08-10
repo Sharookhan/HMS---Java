@@ -11,7 +11,6 @@ public class Patient {
     private String phoneNumber;
     private String email;
     private String address;
-    private String medicalHistoryId;
     private String password;
 
     // Getters and setters
@@ -79,13 +78,7 @@ public class Patient {
         this.address = address;
     }
 
-    public String getMedicalHistoryId() {
-        return medicalHistoryId;
-    }
 
-    public void setMedicalHistoryId(String medicalHistoryId) {
-        this.medicalHistoryId = medicalHistoryId;
-    }
 
     public String getPassword() {
         return password;

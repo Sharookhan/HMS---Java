@@ -1,11 +1,10 @@
-<%@ page import="com.groupd.beans.Appointment" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.groupd.dao.AppointmentDAO" %>
 <%@ page import="com.groupd.dao.PatientDAO" %>
+<%@ page import="com.groupd.beans.Appointment" %>
 <%@ page import="com.groupd.beans.Patient" %>
 <%@ page import="com.groupd.beans.User" %>
 <%@ page import="java.util.List" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,12 +12,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HMS - Doctor Home</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/master.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/master.css" rel="stylesheet">
 </head>
 <body>
 <%@ include file="../common/navbar.jsp" %>
-<div class="container mt-4">
-    <h2>Appointments</h2>
+<div class="container mt-4 form-container">
+
+    <!-- Display pending appointments -->
+    <h2>Pending Appointments</h2>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -36,7 +37,7 @@
                 String doctorId = sessionUser.getId(); // Get doctor ID from User object
                 AppointmentDAO ap = new AppointmentDAO();
                 PatientDAO pao = new PatientDAO();
-                List<Appointment> appointments = ap.getAppointmentsByDoctor(doctorId);
+                List<Appointment> appointments = ap.getPendingAppointmentsByDoctor(doctorId);
 
                 if (appointments != null && !appointments.isEmpty()) {
                     for (Appointment appointment : appointments) {
@@ -56,7 +57,7 @@
         } else {
         %>
         <tr>
-            <td colspan="4">No appointments found.</td>
+            <td colspan="4">No pending appointments found.</td>
         </tr>
         <%
             }

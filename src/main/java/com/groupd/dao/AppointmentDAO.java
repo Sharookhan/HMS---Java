@@ -45,6 +45,7 @@ public class AppointmentDAO {
         return null;
     }
 
+
     public Appointment getPatientAppointment(String patientId) throws SQLException {
         String query = "SELECT * FROM Appointments WHERE patient_id = ?";
         try (Connection connection = DataSourceUtils.getConnection();
@@ -144,4 +145,59 @@ public class AppointmentDAO {
             statement.executeUpdate();
         }
     }
+
+    public List<Appointment> getAppointmentsByDoctor(String doctorId) throws SQLException {
+        String query = "SELECT * FROM Appointments WHERE doctor_id = ? AND (feedback IS NULL OR feedback = '')";
+        List<Appointment> appointments = new ArrayList<>();
+        try (Connection connection = DataSourceUtils.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, doctorId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Appointment appointment = new Appointment();
+                    appointment.setAppointmentId(resultSet.getInt("appointment_id"));
+                    appointment.setPatientId(resultSet.getString("patient_id"));
+                    appointment.setDoctorId(resultSet.getString("doctor_id"));
+                    appointment.setAppointmentDate(resultSet.getDate("appointment_date"));
+                    appointment.setAppointmentTime(resultSet.getTime("appointment_time"));
+                    appointment.setFeedback(resultSet.getString("feedback"));
+                    appointments.add(appointment);
+                }
+            }
+        }
+        return appointments;
+    }
+
+
+    public List<Appointment> getPendingAppointmentsByDoctor(String doctorId) {
+        List<Appointment> pendingAppointments = new ArrayList<>();
+        String query = "SELECT * FROM Appointments WHERE doctor_id = ? AND (feedback IS NULL OR feedback = '')";
+
+        try (Connection connection = DataSourceUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, doctorId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Appointment appointment = new Appointment();
+                appointment.setAppointmentId(resultSet.getInt("appointment_id"));
+                appointment.setDoctorId(resultSet.getString("doctor_id"));
+                appointment.setPatientId(resultSet.getString("patient_id"));
+                appointment.setAppointmentDate(resultSet.getDate("appointment_date"));
+                appointment.setAppointmentTime(resultSet.getTime("appointment_time"));
+                appointment.setFeedback(resultSet.getString("feedback"));
+                // Add any other fields as necessary
+
+                pendingAppointments.add(appointment);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return pendingAppointments;
+    }
+
+
 }

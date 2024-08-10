@@ -1,5 +1,37 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="jakarta.servlet.http.HttpSession" %>
+<%@ page import="com.groupd.beans.User" %>
+<%@ page import="jakarta.servlet.http.HttpServletResponse" %>
+<%@ page import="jakarta.servlet.http.HttpServletRequest" %>
+
+<%
+    if (session != null) {
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            String role = user.getRole();
+            String contextPath = request.getContextPath();
+            String redirectPage = contextPath + "/index.jsp"; // Default to index.jsp if role not found
+
+            // Define role-specific home pages
+            String patientHome = contextPath + "/patients/patientHome.jsp";
+            String doctorHome = contextPath + "/doctors/doctorHome.jsp";
+            String staffHome = contextPath + "/staffs/staffHome.jsp";
+
+            // Redirect based on user role
+            if ("patient".equalsIgnoreCase(role)) {
+                redirectPage = patientHome;
+            } else if ("doctor".equalsIgnoreCase(role)) {
+                redirectPage = doctorHome;
+            } else if ("staff".equalsIgnoreCase(role)) {
+                redirectPage = staffHome;
+            }
+
+            response.sendRedirect(redirectPage);
+            return; // Ensure no further code executes in this JSP
+        }
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +50,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark">
-    <a class="navbar-brand" href="#">HMS </a>
+    <a class="navbar-brand" href="#">HMS</a>
 </nav>
 
 <div class="container-fluid login-container">

@@ -62,7 +62,6 @@ public class ViewEditPatientServlet extends HttpServlet {
         String phoneNumber = request.getParameter("phoneNumber");
         String email = request.getParameter("email");
         String address = request.getParameter("address");
-        String medicalHistoryId = request.getParameter("medicalHistoryId");
 
         PatientDAO patientDAO = new PatientDAO();
         Patient patient = new Patient();
@@ -74,7 +73,6 @@ public class ViewEditPatientServlet extends HttpServlet {
         patient.setPhoneNumber(phoneNumber);
         patient.setEmail(email);
         patient.setAddress(address);
-        patient.setMedicalHistoryId(medicalHistoryId);
 
         try {
             patientDAO.updatePatient(patient);

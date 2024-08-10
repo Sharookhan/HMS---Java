@@ -72,10 +72,6 @@
             <label for="address">Address:</label>
             <input type="text" id="address" name="address" class="form-control" value="<%= patient.getAddress() %>" required>
         </div>
-        <div class="form-group">
-            <label for="medicalHistoryId">Medical History ID:</label>
-            <input type="text" id="medicalHistoryId" name="medicalHistoryId" class="form-control" value="<%= patient.getMedicalHistoryId() %>" required>
-        </div>
         <button type="submit" class="btn btn-primary">Update</button>
     </form>
     <%

@@ -22,9 +22,10 @@ public class UpdateAppointmentServlet extends HttpServlet {
         String appointmentDate = request.getParameter("appointmentDate");
         String appointmentTime = request.getParameter("appointmentTime");
         String feedback = request.getParameter("feedback");
+        String patientId = request.getParameter("patientId");
+        String doctorId = request.getParameter("doctorId");
 
-        // Validate input
-        if (appointmentIdStr == null || appointmentDate == null || appointmentTime == null) {
+        if (appointmentIdStr == null || appointmentDate == null || appointmentTime == null || patientId == null || doctorId == null) {
             request.setAttribute("message", "All fields are required.");
             request.setAttribute("alertClass", "alert-danger");
             request.getRequestDispatcher("/editAppointment.jsp?appointmentId=" + appointmentIdStr).forward(request, response);
@@ -34,9 +35,10 @@ public class UpdateAppointmentServlet extends HttpServlet {
         int appointmentId = Integer.parseInt(appointmentIdStr);
         Appointment appointment = new Appointment();
         appointment.setAppointmentId(appointmentId);
+        appointment.setPatientId(patientId);
+        appointment.setDoctorId(doctorId);
         appointment.setAppointmentDate(java.sql.Date.valueOf(appointmentDate));
 
-        // Handle time formatting
         try {
             if (!appointmentTime.matches("\\d{2}:\\d{2}(:\\d{2})?")) {
                 throw new IllegalArgumentException("Invalid time format.");
@@ -59,15 +61,12 @@ public class UpdateAppointmentServlet extends HttpServlet {
             appointmentDAO.updateAppointment(appointment);
             request.setAttribute("message", "Appointment updated successfully!");
             request.setAttribute("alertClass", "alert-success");
-            request.setAttribute("alertClass", "alert-success");
         } catch (SQLException e) {
             e.printStackTrace();
             request.setAttribute("message", "An error occurred while updating the appointment.");
             request.setAttribute("alertClass", "alert-danger");
         }
 
-        // Redirect to the view appointment page
         response.sendRedirect(request.getContextPath() + "/viewAppointment?appointmentId=" + appointmentId);
     }
 }
-
